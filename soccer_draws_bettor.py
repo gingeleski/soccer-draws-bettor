@@ -83,15 +83,17 @@ class SoccerDrawsSystem():
         self.login()
 
         transaction_dump = self.api.get_transactions()
-        self.starting_balance = transaction_dump['transactionData']['balance']
+        self.starting_balance = float(transaction_dump['transactionData']['balance'])
         self.log('Starting account balance is ' + str(self.starting_balance) + ' BTC.')
         time.sleep(1)
 
-        if float(transaction_dump['transactionData']['inplay']) > 0.0:
+        if float(transaction_dump['transactionData']['inplay']) >= self.BETTING_UNIT:
             self.log('Found there is already a bet in progress.')
             self.bet_in_progress = True
         else:
             self.log('Using default setting of no bet in progress.')
+
+        self.log('Bet tier is at ' + str(self.current_bet_tier) + '.')
 
         self.api.logout()
         time.sleep(1)
@@ -108,6 +110,10 @@ class SoccerDrawsSystem():
         while True:
 
             if self.bet_in_progress is False:
+
+                if self.last_known_balance < self.get_bet_amount():
+                    self.log('** Insufficient funds to proceed. **')
+                    raise RuntimeError('Insufficient funds to proceed.')
 
                 while True:
                     self.login()
@@ -151,7 +157,7 @@ class SoccerDrawsSystem():
 
                     # update last known balance since we've spent money
                     transaction_dump = self.api.get_transactions()
-                    self.last_known_balance = transaction_dump['transactionData']['balance']
+                    self.last_known_balance = float(transaction_dump['transactionData']['balance'])
                     self.log('Available account balance is now ' + str(self.last_known_balance) + ' BTC.')
                     time.sleep(1)
                 else:
@@ -161,21 +167,22 @@ class SoccerDrawsSystem():
             else:
                 self.login()
                 transaction_dump = self.api.get_transactions()
-                current_balance = transaction_dump['transactionData']['balance']
-                current_money_inplay = transaction_dump['transactionData']['inplay']
+                current_balance = float(transaction_dump['transactionData']['balance'])
+                current_money_inplay = float(transaction_dump['transactionData']['inplay'])
                 
                 self.log('Last known balance: ' + str(self.last_known_balance) + ' BTC')
                 self.log('Current balance: ' + str(current_balance) + ' BTC')
                 self.log('Current inplay: ' + str(current_money_inplay) + ' BTC')
 
-                if current_money_inplay == 0.0:
+                if current_money_inplay < self.BETTING_UNIT:
                     self.bet_in_progress = False
                     if current_balance > self.last_known_balance:
-                        current_bet_tier = 1
+                        self.current_bet_tier = 1
                         self.log('Detected WIN, reset bet tier to 1.')
-                    elif current_balance < self.last_known_balance:
-                        current_bet_tier += 1
-                        self.log('Detected LOSS, progress bet tier to ' + str(current_bet_tier) + '.')
+                    # TODO handle 'push' scenario
+                    else:
+                        self.current_bet_tier += 1
+                        self.log('Detected LOSS, progress bet tier to ' + str(self.current_bet_tier) + '.')
                     self.last_known_balance = current_balance
 
             self.logout()
@@ -185,6 +192,7 @@ class SoccerDrawsSystem():
                 break
             else:
                 # TODO in most cases we'll know when the bet was placed, appropriate the wait to that
+                # TODO shouldn't be sleeping if we just progressed the bet tier
                 self.log('Sleeping for ' + str(self.DEFAULT_RETRY_TIME) + ' seconds.')
                 time.sleep(self.DEFAULT_RETRY_TIME)
 
