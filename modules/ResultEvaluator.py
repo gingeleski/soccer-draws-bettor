@@ -9,4 +9,4 @@ class ResultEvaluator(object):
 
     def __init__(self):
         # TODO
-        print('ResultsEvaluator __init__')
+        pass
