@@ -1,0 +1,3 @@
+[submodule "nitrogen-sports-api"]
+	path = nitrogen-sports-api
+	url = https://github.com/gingeleski/nitrogen-sports-api.git
