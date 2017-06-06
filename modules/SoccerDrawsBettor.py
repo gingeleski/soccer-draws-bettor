@@ -8,6 +8,9 @@ from NitrogenSession import NitrogenSession
 from ResultEvaluator import ResultEvaluator
 from SystemParameters import *
 
+import sched
+import time
+
 class SoccerDrawsBettor(object):
     """
     Main class of soccer draws betting system, orchestrates all others
@@ -18,6 +21,8 @@ class SoccerDrawsBettor(object):
         self.BettingAnalyzer = BettingAnalyzer()
         self.MatchMaker = MatchMaker()
         self.ResultEvaluator = ResultEvaluator()
+
+        self.scheduler = sched.scheduler(time.time, time.sleep)
 
         self.session = NitrogenSession()
 
@@ -31,20 +36,24 @@ class SoccerDrawsBettor(object):
         acct_balance = self.session.get_account_balance()
         self.BettingAnalyzer.set_balance(acct_balance)
 
-        # continue_bets() will verify we have enough of a balance to start betting
-        if self.BettingAnalyzer.continue_betting() is True:
-            # TODO schedule find_next_bet in 1 second
-            print('TODO schedule find_next_bet 1 second from now')
+        # use continue_bets() to verify we have enough $$$
+        if self.BettingAnalyzer.continue_betting() is False:
+            raise Exception('Insufficient funds to start betting.')
+
+        self.scheduler.enter(1 * SECONDS, 1, self.find_next_bet)
+        self.scheduler.run()
 
     def find_next_bet(self):
         """
         find_next_bet
         """
 
-        next_bet = self.MatchMaker.find_next_bet()
+        next_bet = self.MatchMaker.find_next_bet(self.session)
         if next_bet is None:
-            # schedule another find_next_bet for 90 minutes out
-            pass
+            # schedule another find_next_bet after the specified retry time
+            print('next_bet is none, scheduling a retry...')
+            self.scheduler.enter(FIND_BET_RETRY_TIME, 1, self.find_next_bet)
         else:
-            # place the bet then set ResultEvaluator to watch it
-            pass
+            # TODO place the bet then set ResultEvaluator to watch it
+            print('Would place the following bet...')
+            print(next_bet)

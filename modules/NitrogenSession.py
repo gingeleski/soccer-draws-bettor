@@ -27,8 +27,9 @@ class NitrogenSession(object):
         """
 
         self.api.login(NITROGEN_USER, NITROGEN_PASS)
-        time.sleep(1)
         self.logged_in = True
+        self.last_login_time = int(time.time())
+        time.sleep(1)
 
     def logout(self):
         """
@@ -36,12 +37,12 @@ class NitrogenSession(object):
         """
 
         self.api.logout()
-        time.sleep(1)
         self.logged_in = False
+        time.sleep(1)
 
     def freshen_session(self):
         """
-        Make sure the session is fresh, either by logging in or otherwise taking measures to avoid timeout
+        Ensure the session is fresh, either by logging in or taking other measures to avoid timeout
         """
 
         if self.logged_in is False:
@@ -59,3 +60,12 @@ class NitrogenSession(object):
 
         transaction_dump = self.api.get_transactions()
         return float(transaction_dump['transactionData']['balance'])
+
+    def find_upcoming_games(self):
+        """
+        Get data dump of upcoming soccer games
+        """
+
+        self.freshen_session()
+
+        return self.api.find_upcoming_games()

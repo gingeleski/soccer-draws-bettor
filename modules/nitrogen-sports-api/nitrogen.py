@@ -229,3 +229,19 @@ class NitrogenApi():
         else:
             print(req.text)
             raise RuntimeError('Response to #find_upcoming_games not OK')
+
+    def find_games(self, sport='Soccer', league='', period_description=''):
+        """
+        Request games for the given sport and league
+        """
+
+        games_url = BASE_URL + 'php/query/findgames.php'
+        payload = {'sport' : sport,
+                   'league' : league,
+                   'period_description': period_description}
+        req = self.session.post(games_url, data=payload, verify=False)
+        if req.status_code == requests.codes.ok:
+            return req.json()
+        else:
+            print(req.text)
+            raise RuntimeError('Response to #find_games not OK')

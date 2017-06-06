@@ -56,3 +56,6 @@ Notes dump 6-4-2017
 if it was a loss, log the net profit as -1 * wager_value
 if it was a win, log net profit as wager_to_win
 
+---
+
+First find_upcoming_games, then cache all the results of the various soccer leagues
