@@ -2,8 +2,10 @@
 MatchFinder.py
 """
 
+from GameQueue import GameQueue
 from SystemParameters import *
 
+import queue
 import time
 
 class MatchMaker(object):
@@ -12,7 +14,7 @@ class MatchMaker(object):
     """
 
     def __init__(self):
-        pass
+        self.game_cache = GameQueue()
 
     def find_next_bet(self, nitro_session):
         """
@@ -22,24 +24,41 @@ class MatchMaker(object):
             nitro_session (NitrogenSession) - Session to retrieve game data with
         """
 
-        games_cache = nitro_session.find_upcoming_games()
+        min_cutoff_time = int(time.time()) + BUFFER_TIME_BEFORE_GAMES
 
-        MIN_CUTOFF = int(time.time()) + BUFFER_TIME_BEFORE_GAMES
+        # TODO loop through and hit all the other "leagues'" endpoints for data
+        games_json = nitro_session.find_upcoming_games()
 
-        for event in games_cache['data']:
+        self.interpret_games_json(games_json, min_cutoff_time)
+
+        min_cutoff_time = int(time.time()) + BUFFER_TIME_BEFORE_GAMES
+        this_game = self.game_cache.get()
+
+        while this_game is not None:
+            if this_game['cutoff_time'] >= min_cutoff_time:
+                return this_game
+            this_game = self.game_cache.get()
+
+    def interpret_games_json(self, games_json, min_cutoff_time):
+        """
+        interpret_games_json
+        """
+
+        for event in games_json['data']:
             event_id = event['event_id']
             for period in event['period']:
                 period_id = period['period_id']
                 if 'moneyLine' in period and period['moneyLine'] is not None:
-                    if 'cutoffDateTime' in period and int(period['cutoffDateTime']) >= MIN_CUTOFF:
-                        for line in period['moneyLine']:
-                            if 'drawPrice' in line and line['drawPrice'] is not None:
-                                draw_price = float(line['drawPrice'])
-                                if draw_price >= MIN_ODDS and draw_price <= MAX_ODDS:
-                                    return {'event_id': event_id,
-                                            'period_id': period_id,
-                                            'bet_type': 'moneyline_draw',
-                                            'bet_id': '-1'}
-
-        # if we get here we didn't find a suitable bet
-        return None
+                    if 'cutoffDateTime' in period:
+                        cutoff_time = int(period['cutoffDateTime'])
+                        if cutoff_time >= min_cutoff_time:
+                            for line in period['moneyLine']:
+                                if 'drawPrice' in line and line['drawPrice'] is not None:
+                                    draw_price = float(line['drawPrice'])
+                                    if draw_price >= MIN_ODDS and draw_price <= MAX_ODDS:
+                                        game_data = {'cutoff_time' : cutoff_time,
+                                                     'event_id' : event_id,
+                                                     'period_id' : period_id,
+                                                     'bet_type' : 'moneyline_draw',
+                                                     'bet_id' : '-1'}
+                                        self.game_cache.put(game_data)
