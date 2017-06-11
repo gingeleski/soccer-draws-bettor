@@ -245,3 +245,16 @@ class NitrogenApi():
         else:
             print(req.text)
             raise RuntimeError('Response to #find_games not OK')
+
+    def get_my_wagers(self):
+        """
+        Get 'My Wagers'
+        """
+
+        wagers_url = BASE_URL + 'php/query/mywagers.php'
+        req = self.session.post(wagers_url, verify=False)
+        if req.status_code == requests.codes.ok:
+            return req.json()
+        else:
+            print(req.text)
+            raise RuntimeError('Response to #get_my_wagers not OK')
