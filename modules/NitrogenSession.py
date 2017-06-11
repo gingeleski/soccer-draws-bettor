@@ -77,4 +77,4 @@ class NitrogenSession(object):
 
         self.freshen_session()
 
-        return self.api.find_league_games(league=league_key)
+        return self.api.find_games(league=league_key)
