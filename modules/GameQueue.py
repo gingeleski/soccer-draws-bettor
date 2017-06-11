@@ -35,7 +35,7 @@ class GameQueue(object):
             (object)
         """
 
-        if self.empty:
+        if self.empty() is True:
             return None
         to_return = self.queue[0]
         del self.queue[0]
