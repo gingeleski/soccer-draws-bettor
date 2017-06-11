@@ -61,6 +61,15 @@ class NitrogenSession(object):
         transaction_dump = self.api.get_transactions()
         return float(transaction_dump['transactionData']['balance'])
 
+    def get_my_wagers(self):
+        """
+        Get 'My Wagers'
+        """
+
+        self.freshen_session()
+
+        return self.api.get_my_wagers()
+
     def find_upcoming_games(self):
         """
         Get data dump of upcoming soccer games
