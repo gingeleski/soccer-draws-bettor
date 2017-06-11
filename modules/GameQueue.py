@@ -23,7 +23,7 @@ class GameQueue(object):
             (bool)
         """
 
-        if len(self.queue == 0):
+        if len(self.queue) == 0:
             return True
         return False
 
@@ -44,7 +44,6 @@ class GameQueue(object):
     def put(self, game_data):
         """
         Add an object, inserting based on cutoff time
-
         """
 
         if self.empty() is True:
@@ -52,5 +51,10 @@ class GameQueue(object):
             self.queue.append(game_data)
         else:
             # otherwise we have to figure out where it rightfully goes
-            # TODO
-            pass
+            for idx, val in enumerate(self.queue):
+                if game_data['cutoff_time'] <= val['cutoff_time']:
+                    self.queue.insert(idx, game_data)
+                    break
+                elif idx == len(self.queue) - 1:
+                    self.queue.append(game_data)
+                    break
