@@ -67,46 +67,46 @@ HARD_SESSION_TIMEOUT = 5 * MINUTES
 # SOCCER GAME DATA KEYS
 
 SOCCER_GAME_DATA_KEYS = []
-SOCCER_GAME_DATA_KEYS += 'UEFA+-+U21+European+Championship'
-SOCCER_GAME_DATA_KEYS += 'USA+-+Major+League+Soccer'
-SOCCER_GAME_DATA_KEYS += 'USA+-+Major+League+Soccer+Corners'
-SOCCER_GAME_DATA_KEYS += 'International+-+Friendlies'
-SOCCER_GAME_DATA_KEYS += 'International+-+Friendlies+Corners'
-SOCCER_GAME_DATA_KEYS += 'Spain+-+Segunda+Liga'
-SOCCER_GAME_DATA_KEYS += 'Italy+-+Serie+B'
-SOCCER_GAME_DATA_KEYS += 'Algeria+-+Professional+Ligue+1'
-SOCCER_GAME_DATA_KEYS += 'Algeria+-+Youth+U21+League'
-SOCCER_GAME_DATA_KEYS += 'Argentina+-+Cup'
-SOCCER_GAME_DATA_KEYS += 'Argentina+-+Primera+B+Nacional'
-SOCCER_GAME_DATA_KEYS += 'Argentina+-+Primera+B+Nacional+Corners'
-SOCCER_GAME_DATA_KEYS += 'Argentina+-+Primera+Division'
-SOCCER_GAME_DATA_KEYS += 'Argentina+-+Primera+Division+Corners'
-SOCCER_GAME_DATA_KEYS += 'Bolivia+-+LFPB'
-SOCCER_GAME_DATA_KEYS += 'Brazil+-+U20'
-SOCCER_GAME_DATA_KEYS += 'China+-+Super+League'
-SOCCER_GAME_DATA_KEYS += 'Club+Friendlies'
-SOCCER_GAME_DATA_KEYS += 'FIFA+-+World+Cup+U20'
-SOCCER_GAME_DATA_KEYS += 'FIFA+-+Confed+Cup'
-SOCCER_GAME_DATA_KEYS += 'Germany+-+Oberliga'
-SOCCER_GAME_DATA_KEYS += 'Germany+-+Regionalliga+Cup'
-SOCCER_GAME_DATA_KEYS += 'International+-+Friendlies+U21+Corners'
-SOCCER_GAME_DATA_KEYS += 'International+-+Friendlies+U21'
-SOCCER_GAME_DATA_KEYS += 'Ireland+-+Premier'
-SOCCER_GAME_DATA_KEYS += 'Jamaica+-+Premier+League'
-SOCCER_GAME_DATA_KEYS += 'Lithuania+-++A+Lyga'
-SOCCER_GAME_DATA_KEYS += 'Romania+-+Liga+1'
-SOCCER_GAME_DATA_KEYS += 'Venezuela+-+Primera+Division'
-SOCCER_GAME_DATA_KEYS += 'USA+-+North+American+Soccer+League'
-SOCCER_GAME_DATA_KEYS += 'Austria+-+Regionalliga+Mitte'
-SOCCER_GAME_DATA_KEYS += 'Austria+-+Regionalliga'
-SOCCER_GAME_DATA_KEYS += 'Australia+NPL+-+Western+Australia'
-SOCCER_GAME_DATA_KEYS += 'Australia+NPL+-+Victoria'
-SOCCER_GAME_DATA_KEYS += 'Australia+NPL+-+South+Australia'
-SOCCER_GAME_DATA_KEYS += 'Australia+NPL+-+New+South+Wales'
-SOCCER_GAME_DATA_KEYS += 'Australia+-+Women+League'
-SOCCER_GAME_DATA_KEYS += 'Australia+-+Victoria+Premier+League+Women'
-SOCCER_GAME_DATA_KEYS += 'Australia+-+National+Youth+League'
-SOCCER_GAME_DATA_KEYS += 'Australia+-+FFA+Cup+Qualifiers'
-SOCCER_GAME_DATA_KEYS += 'Australia+-+FFA+Cup'
-SOCCER_GAME_DATA_KEYS += 'Australia+-+Brisbane+Premier+League'
-SOCCER_GAME_DATA_KEYS += 'Australia+-+Brisbane+Capital+League+1'
+SOCCER_GAME_DATA_KEYS.append('UEFA+-+U21+European+Championship')
+SOCCER_GAME_DATA_KEYS.append('USA+-+Major+League+Soccer')
+SOCCER_GAME_DATA_KEYS.append('USA+-+Major+League+Soccer+Corners')
+SOCCER_GAME_DATA_KEYS.append('International+-+Friendlies')
+SOCCER_GAME_DATA_KEYS.append('International+-+Friendlies+Corners')
+SOCCER_GAME_DATA_KEYS.append('Spain+-+Segunda+Liga')
+SOCCER_GAME_DATA_KEYS.append('Italy+-+Serie+B')
+SOCCER_GAME_DATA_KEYS.append('Algeria+-+Professional+Ligue+1')
+SOCCER_GAME_DATA_KEYS.append('Algeria+-+Youth+U21+League')
+SOCCER_GAME_DATA_KEYS.append('Argentina+-+Cup')
+SOCCER_GAME_DATA_KEYS.append('Argentina+-+Primera+B+Nacional')
+SOCCER_GAME_DATA_KEYS.append('Argentina+-+Primera+B+Nacional+Corners')
+SOCCER_GAME_DATA_KEYS.append('Argentina+-+Primera+Division')
+SOCCER_GAME_DATA_KEYS.append('Argentina+-+Primera+Division+Corners')
+SOCCER_GAME_DATA_KEYS.append('Bolivia+-+LFPB')
+SOCCER_GAME_DATA_KEYS.append('Brazil+-+U20')
+SOCCER_GAME_DATA_KEYS.append('China+-+Super+League')
+SOCCER_GAME_DATA_KEYS.append('Club+Friendlies')
+SOCCER_GAME_DATA_KEYS.append('FIFA+-+World+Cup+U20')
+SOCCER_GAME_DATA_KEYS.append('FIFA+-+Confed+Cup')
+SOCCER_GAME_DATA_KEYS.append('Germany+-+Oberliga')
+SOCCER_GAME_DATA_KEYS.append('Germany+-+Regionalliga+Cup')
+SOCCER_GAME_DATA_KEYS.append('International+-+Friendlies+U21+Corners')
+SOCCER_GAME_DATA_KEYS.append('International+-+Friendlies+U21')
+SOCCER_GAME_DATA_KEYS.append('Ireland+-+Premier')
+SOCCER_GAME_DATA_KEYS.append('Jamaica+-+Premier+League')
+SOCCER_GAME_DATA_KEYS.append('Lithuania+-++A+Lyga')
+SOCCER_GAME_DATA_KEYS.append('Romania+-+Liga+1')
+SOCCER_GAME_DATA_KEYS.append('Venezuela+-+Primera+Division')
+SOCCER_GAME_DATA_KEYS.append('USA+-+North+American+Soccer+League')
+SOCCER_GAME_DATA_KEYS.append('Austria+-+Regionalliga+Mitte')
+SOCCER_GAME_DATA_KEYS.append('Austria+-+Regionalliga')
+SOCCER_GAME_DATA_KEYS.append('Australia+NPL+-+Western+Australia')
+SOCCER_GAME_DATA_KEYS.append('Australia+NPL+-+Victoria')
+SOCCER_GAME_DATA_KEYS.append('Australia+NPL+-+South+Australia')
+SOCCER_GAME_DATA_KEYS.append('Australia+NPL+-+New+South+Wales')
+SOCCER_GAME_DATA_KEYS.append('Australia+-+Women+League')
+SOCCER_GAME_DATA_KEYS.append('Australia+-+Victoria+Premier+League+Women')
+SOCCER_GAME_DATA_KEYS.append('Australia+-+National+Youth+League')
+SOCCER_GAME_DATA_KEYS.append('Australia+-+FFA+Cup+Qualifiers')
+SOCCER_GAME_DATA_KEYS.append('Australia+-+FFA+Cup')
+SOCCER_GAME_DATA_KEYS.append('Australia+-+Brisbane+Premier+League')
+SOCCER_GAME_DATA_KEYS.append('Australia+-+Brisbane+Capital+League+1')
