@@ -69,3 +69,12 @@ class NitrogenSession(object):
         self.freshen_session()
 
         return self.api.find_upcoming_games()
+
+    def find_league_games(self, league_key):
+        """
+        Get dump of soccuer games for the given league
+        """
+
+        self.freshen_session()
+
+        return self.api.find_league_games(league=league_key)

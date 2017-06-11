@@ -26,10 +26,16 @@ class MatchMaker(object):
 
         min_cutoff_time = int(time.time()) + BUFFER_TIME_BEFORE_GAMES
 
-        # TODO loop through and hit all the other "leagues'" endpoints for data
+        # Cache the upcoming games
         games_json = nitro_session.find_upcoming_games()
-
         self.interpret_games_json(games_json, min_cutoff_time)
+
+        # Cache games from nearly all Nitrogen's soccer leagues
+        for league_key in SOCCER_GAME_DATA_KEYS:
+            min_cutoff_time = int(time.time()) + BUFFER_TIME_BEFORE_GAMES
+
+            games_json = nitro_session.find_league_games(league_key)
+            self.interpret_games_json(games_json, min_cutoff_time)
 
         min_cutoff_time = int(time.time()) + BUFFER_TIME_BEFORE_GAMES
         this_game = self.game_cache.get()
