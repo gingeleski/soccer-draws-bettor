@@ -52,9 +52,14 @@ class GameQueue(object):
         else:
             # otherwise we have to figure out where it rightfully goes
             for idx, val in enumerate(self.queue):
-                if game_data['cutoff_time'] <= val['cutoff_time']:
+                if game_data['cutoff_time'] < val['cutoff_time']:
                     self.queue.insert(idx, game_data)
                     break
+                elif game_data['cutoff_time'] == val['cutoff_time']:
+                    # trying to avoid any duplicate entries...
+                    if game_data['event_id'] != val['event_id']:
+                        self.queue.insert(idx, game_data)
+                        break
                 elif idx == len(self.queue) - 1:
                     self.queue.append(game_data)
                     break
