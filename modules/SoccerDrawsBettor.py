@@ -59,6 +59,7 @@ class SoccerDrawsBettor(object):
             print(next_bet)
             # TODO must set this `game_cutoff_time` var
             game_cutoff_time = -1
+            #self.MatchMaker.place_bet(...
 
             # Load the bet into ResultEvaluator
             ###self.ResultEvaluator.acquire_target(self.session)

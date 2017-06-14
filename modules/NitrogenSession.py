@@ -90,3 +90,10 @@ class NitrogenSession(object):
         self.freshen_session()
 
         return self.api.find_games(league=league_key)
+
+    def add_bet(self, event_id, period_id, bet_type):
+        """
+        add_bet
+        """
+
+        self.api.add_bet(event_id, period_id, bet_type)

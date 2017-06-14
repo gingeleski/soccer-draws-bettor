@@ -53,6 +53,50 @@ class MatchMaker(object):
                 return this_game
             this_game = self.game_cache.get()
 
+    def place_bet(self, nitro_session):
+        """
+        place_bet
+        """
+
+        print('Adding bet...')
+
+        # TODO there's a world of todo's in here, do them
+
+        event_id = 'TODO'
+        period_id = 'TODO'
+        add_bet_response = nitro_session.add_bet(event_id, period_id, 'moneyline_draw')
+
+        if 'data' in add_bet_response:
+            bet_id = add_bet_response['data'][0]['bet'][0]['bet_id']
+            #self.log('Success, bet ID is ' + str(bet_id) + '.')
+            time.sleep(1)
+
+            # adjust risk to appropriate amount
+            #current_bet = self.get_bet_amount()
+            #print('Adjusting risk to ' + str(current_bet) + ' BTC...')
+            #self.api.adjust_risk(bet_id, str(current_bet))
+            time.sleep(1)
+
+            print('Placing betslip...')
+            #self.api.place_betslip()
+            time.sleep(1)
+
+            print('Confirming betslip...')
+            #self.api.confirm_betslip()
+            time.sleep(1)
+
+            #self.bet_in_progress = True
+            print('Bet in progress.')
+
+            # update last known balance since we've spent money
+            #transaction_dump = self.api.get_transactions()
+            #self.last_known_balance = float(transaction_dump['transactionData']['balance'])
+            #print('Available account balance is now ' + str(self.last_known_balance) + ' BTC.')
+            time.sleep(1)
+        else:
+            print('** Something went wrong adding bet. **')
+            raise RuntimeError('Something went wrong adding bet.')
+
     def interpret_games_json(self, games_json, min_cutoff_time):
         """
         interpret_games_json
