@@ -82,6 +82,9 @@ class NitrogenSession(object):
     def find_league_games(self, league_key):
         """
         Get dump of soccuer games for the given league
+
+        Args:
+            league_key (str)
         """
 
         self.freshen_session()
