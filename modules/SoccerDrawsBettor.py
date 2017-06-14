@@ -54,6 +54,33 @@ class SoccerDrawsBettor(object):
             print('next_bet is none, scheduling a retry...')
             self.scheduler.enter(FIND_BET_RETRY_TIME, 1, self.find_next_bet)
         else:
-            # TODO place the bet then set ResultEvaluator to watch it
+            # TODO place the bet
             print('Would place the following bet...')
             print(next_bet)
+            # TODO must set this `game_cutoff_time` var
+            game_cutoff_time = -1
+
+            # Load the bet into ResultEvaluator
+            ###self.ResultEvaluator.acquire_target(self.session)
+
+            # Check on the game status around when it'll probably be over
+            first_game_check_time = game_cutoff_time + ESTIMATED_GAME_TIME - int(time.time())
+            self.scheduler.enter(first_game_check_time, 1, self.check_on_bet)
+
+    def check_on_bet(self):
+        """
+        check_on_bet
+        """
+
+        game_bet_outcome = self.ResultEvaluator.get_status(self.session)
+
+        if game_bet_outcome == 'PENDING':
+            self.scheduler.enter(BET_RECHECK_TIME, 1, self.check_on_bet)
+        elif game_bet_outcome == 'WIN':
+            pass  # TODO
+        elif game_bet_outcome == 'LOSS':
+            pass  # TODO
+        elif game_bet_outcome == 'DRAW':
+            pass  # TODO
+        else:
+            raise RuntimeError('Received unsupported game bet outcome')
