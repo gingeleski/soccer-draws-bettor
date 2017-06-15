@@ -18,7 +18,7 @@ class NitrogenSession(object):
 
         self.api = NitrogenApi()
 
-        self.logged_in = False
+        printged_in = False
         self.last_login_time = -1
 
     def login(self):
@@ -27,7 +27,7 @@ class NitrogenSession(object):
         """
 
         self.api.login(NITROGEN_USER, NITROGEN_PASS)
-        self.logged_in = True
+        printged_in = True
         self.last_login_time = int(time.time())
         time.sleep(1)
 
@@ -37,7 +37,7 @@ class NitrogenSession(object):
         """
 
         self.api.logout()
-        self.logged_in = False
+        printged_in = False
         time.sleep(1)
 
     def freshen_session(self):
@@ -45,11 +45,11 @@ class NitrogenSession(object):
         Ensure the session is fresh, either by logging in or taking other measures to avoid timeout
         """
 
-        if self.logged_in is False:
-            self.login()
+        if printged_in is False:
+            printin()
         elif int(time.time()) - self.last_login_time >= HARD_SESSION_TIMEOUT:
-            self.logout()
-            self.login()
+            printout()
+            printin()
 
     def get_account_balance(self):
         """
@@ -91,42 +91,63 @@ class NitrogenSession(object):
 
         return self.api.find_games(league=league_key)
 
+    def add_and_confirm_bet(self, event_id, period_id, bet_type, amount_to_bet):
+        """
+        TODO write a better description but this should do the following 4 methods
+        """
+
+        self.freshen_session()
+
+        add_bet_response = self.add_bet(event_id, period_id, bet_type)
+
+        if 'data' in add_bet_response:
+            bet_id = add_bet_response['data'][0]['bet'][0]['bet_id']
+            print('Success, bet ID is ' + str(bet_id) + '.')
+            time.sleep(1)
+
+            # adjust risk to appropriate amount
+            print('Adjusting risk to ' + str(amount_to_bet) + ' BTC...')
+            self.adjust_risk(bet_id, amount_to_bet)
+            time.sleep(1)
+
+            print('Placing betslip...')
+            self.place_betslip()
+            time.sleep(1)
+
+            print('Confirming betslip...')
+            self.confirm_betslip()
+            time.sleep(1)
+
+            print('Bet in progress.')
+
+        else:
+            print('** Something went wrong adding bet. **')
+            raise RuntimeError('Something went wrong adding bet.')
+
     def add_bet(self, event_id, period_id, bet_type):
         """
         add_bet
         """
 
-        self.freshen_session()
-
         return self.api.add_bet(event_id, period_id, bet_type)
-        # TODO sleep for 1 sec?
 
     def adjust_risk(self, bet_id, amount_to_bet):
         """
         adjust_risk
         """
 
-        self.freshen_session()
-
         return self.api.adjust_risk(bet_id, str(amount_to_bet))
-        # TODO sleep for 1 sec?
 
     def place_betslip(self):
         """
         place_betslip
         """
 
-        self.freshen_session()
-
         return self.api.place_betslip()
-        # TODO sleep for 1 sec?
 
     def confirm_betslip(self):
         """
         confirm_betslip
         """
 
-        self.freshen_session()
-
         return self.api.confirm_betslip()
-        # TODO sleep for 1 sec?
