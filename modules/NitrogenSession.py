@@ -96,4 +96,37 @@ class NitrogenSession(object):
         add_bet
         """
 
-        self.api.add_bet(event_id, period_id, bet_type)
+        self.freshen_session()
+
+        return self.api.add_bet(event_id, period_id, bet_type)
+        # TODO sleep for 1 sec?
+
+    def adjust_risk(self, bet_id, amount_to_bet):
+        """
+        adjust_risk
+        """
+
+        self.freshen_session()
+
+        return self.api.adjust_risk(bet_id, str(amount_to_bet))
+        # TODO sleep for 1 sec?
+
+    def place_betslip(self):
+        """
+        place_betslip
+        """
+
+        self.freshen_session()
+
+        return self.api.place_betslip()
+        # TODO sleep for 1 sec?
+
+    def confirm_betslip(self):
+        """
+        confirm_betslip
+        """
+
+        self.freshen_session()
+
+        return self.api.confirm_betslip()
+        # TODO sleep for 1 sec?
