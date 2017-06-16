@@ -4,7 +4,7 @@ SystemParameters.py
 
 from datetime import datetime
 
-_START_TIME_STR = datetime.now().strftime('m-%d-%Y_%H-%M-%S')
+_START_TIME_STR = datetime.now().strftime('%m-%d-%Y_%H-%M-%S')
 
 # The following are constants to represent times in seconds
 SECONDS = 1
@@ -14,8 +14,8 @@ LOGFILE_NAME = 'actions_' + _START_TIME_STR + '.log'
 BET_DB_NAME = 'bets_' + _START_TIME_STR + '.db'
 
 # Nitrogen Sports credentials
-NITROGEN_USER = '<YOUR USERNAME>'
-NITROGEN_PASS = '<YOUR PASSWORD>'
+NITROGEN_USER = '<YOUR_USERNAME>'
+NITROGEN_PASS = '<YOUR_PASSWORD>'
 
 ####################################################################################################
 
@@ -60,6 +60,10 @@ FIND_BET_RETRY_TIME = 90 * MINUTES
 BUFFER_TIME_BEFORE_GAMES = 2 * MINUTES
 
 HARD_SESSION_TIMEOUT = 5 * MINUTES
+
+ESTIMATED_GAME_TIME = 95 * MINUTES
+
+BET_RECHECK_TIME = 9 * MINUTES
 
 ####################################################################################################
 

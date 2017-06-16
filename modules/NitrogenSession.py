@@ -6,7 +6,9 @@ import os, sys
 sys.path.append('.' + os.sep + 'modules' + os.sep + 'nitrogen-sports-api')
 from nitrogen import NitrogenApi
 
+from Logger import Logger
 from SystemParameters import *
+
 import time
 
 class NitrogenSession(object):
@@ -18,7 +20,7 @@ class NitrogenSession(object):
 
         self.api = NitrogenApi()
 
-        printged_in = False
+        self.logged_in = False
         self.last_login_time = -1
 
     def login(self):
@@ -27,7 +29,7 @@ class NitrogenSession(object):
         """
 
         self.api.login(NITROGEN_USER, NITROGEN_PASS)
-        printged_in = True
+        self.logged_in = True
         self.last_login_time = int(time.time())
         time.sleep(1)
 
@@ -37,7 +39,7 @@ class NitrogenSession(object):
         """
 
         self.api.logout()
-        printged_in = False
+        self.logged_in = False
         time.sleep(1)
 
     def freshen_session(self):
@@ -45,11 +47,11 @@ class NitrogenSession(object):
         Ensure the session is fresh, either by logging in or taking other measures to avoid timeout
         """
 
-        if printged_in is False:
-            printin()
+        if self.logged_in is False:
+            self.login()
         elif int(time.time()) - self.last_login_time >= HARD_SESSION_TIMEOUT:
-            printout()
-            printin()
+            self.logout()
+            self.login()
 
     def get_account_balance(self):
         """
@@ -59,7 +61,10 @@ class NitrogenSession(object):
         self.freshen_session()
 
         transaction_dump = self.api.get_transactions()
-        return float(transaction_dump['transactionData']['balance'])
+        acct_balance = float(transaction_dump['transactionData']['balance'])
+        Logger.log('Observing account balance at ' + str(acct_balance) + ' BTC.')
+
+        return acct_balance
 
     def get_my_wagers(self):
         """
@@ -93,7 +98,8 @@ class NitrogenSession(object):
 
     def add_and_confirm_bet(self, event_id, period_id, bet_type, amount_to_bet):
         """
-        TODO write a better description but this should do the following 4 methods
+        Goes through the whole process of adding and confirming a bet, which
+        includes 4 different HTTP requests
         """
 
         self.freshen_session()
@@ -102,26 +108,25 @@ class NitrogenSession(object):
 
         if 'data' in add_bet_response:
             bet_id = add_bet_response['data'][0]['bet'][0]['bet_id']
-            print('Success, bet ID is ' + str(bet_id) + '.')
+            Logger.log('Success, bet ID is ' + str(bet_id) + '.')
             time.sleep(1)
 
             # adjust risk to appropriate amount
-            print('Adjusting risk to ' + str(amount_to_bet) + ' BTC...')
+            Logger.log('Adjusting risk to ' + str(amount_to_bet) + ' BTC...')
             self.adjust_risk(bet_id, amount_to_bet)
             time.sleep(1)
 
-            print('Placing betslip...')
+            Logger.log('Placing betslip...')
             self.place_betslip()
             time.sleep(1)
 
-            print('Confirming betslip...')
+            Logger.log('Confirming betslip...')
             self.confirm_betslip()
             time.sleep(1)
 
-            print('Bet in progress.')
-
+            Logger.log('Bet in progress.')
         else:
-            print('** Something went wrong adding bet. **')
+            Logger.log('** Something went wrong adding bet. **')
             raise RuntimeError('Something went wrong adding bet.')
 
     def add_bet(self, event_id, period_id, bet_type):

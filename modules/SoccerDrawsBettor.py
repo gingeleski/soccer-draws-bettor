@@ -3,6 +3,7 @@ SoccerDrawsBettor.py
 """
 
 from BettingAnalyzer import BettingAnalyzer
+from Logger import Logger
 from MatchMaker import MatchMaker
 from NitrogenSession import NitrogenSession
 from ResultEvaluator import ResultEvaluator
@@ -30,13 +31,13 @@ class SoccerDrawsBettor(object):
 
     def start(self):
         """
-        start
+        Start
         """
 
         acct_balance = self.session.get_account_balance()
         self.BettingAnalyzer.set_balance(acct_balance)
 
-        # use continue_bets() to verify we have enough $$$
+        # Use continue_bets() to verify we have enough $$$
         if self.BettingAnalyzer.continue_betting() is False:
             raise Exception('Insufficient funds to start betting.')
 
@@ -45,24 +46,23 @@ class SoccerDrawsBettor(object):
 
     def find_next_bet(self):
         """
-        find_next_bet
+        Find next bet
         """
 
         next_bet = self.MatchMaker.find_next_bet(self.session)
         if next_bet is None:
-            # schedule another find_next_bet after the specified retry time
-            print('next_bet is none, scheduling a retry...')
+            # Schedule another find_next_bet after the specified retry time
+            Logger.log('next_bet is none, scheduling a retry...')
             self.scheduler.enter(FIND_BET_RETRY_TIME, 1, self.find_next_bet)
         else:
-            # TODO place the bet
-            print('Would place the following bet...')
-            print(next_bet)
-            # TODO must set this `game_cutoff_time` var
-            game_cutoff_time = -1
-            #self.MatchMaker.place_bet(...
+            Logger.log('Going to place the following bet...')
+            Logger.log(next_bet)
+            game_cutoff_time = next_bet['cutoff_time']
+            amount_to_bet = self.BettingAnalyzer.get_current_bet_amount()
+            self.MatchMaker.place_bet(self.session, next_bet, amount_to_bet)
 
             # Load the bet into ResultEvaluator
-            ###self.ResultEvaluator.acquire_target(self.session)
+            self.ResultEvaluator.acquire_target(self.session)
 
             # Check on the game status around when it'll probably be over
             first_game_check_time = game_cutoff_time + ESTIMATED_GAME_TIME - int(time.time())
@@ -70,18 +70,21 @@ class SoccerDrawsBettor(object):
 
     def check_on_bet(self):
         """
-        check_on_bet
+        Check on a bet in progress, see if there's yet a result
         """
 
         game_bet_outcome = self.ResultEvaluator.get_status(self.session)
 
         if game_bet_outcome == 'PENDING':
             self.scheduler.enter(BET_RECHECK_TIME, 1, self.check_on_bet)
+            return
         elif game_bet_outcome == 'WIN':
-            pass  # TODO
+            self.BettingAnalyzer.reset_betting_level()
         elif game_bet_outcome == 'LOSS':
-            pass  # TODO
+            self.BettingAnalyzer.progress_betting_level()
         elif game_bet_outcome == 'DRAW':
-            pass  # TODO
+            pass
         else:
             raise RuntimeError('Received unsupported game bet outcome')
+
+        self.scheduler.enter(1 * SECONDS, 1, self.find_next_bet)

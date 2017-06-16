@@ -3,6 +3,7 @@ MatchFinder.py
 """
 
 from GameQueue import GameQueue
+from Logger import Logger
 from SystemParameters import *
 
 import queue
@@ -26,7 +27,7 @@ class MatchMaker(object):
 
         min_cutoff_time = int(time.time()) + BUFFER_TIME_BEFORE_GAMES
 
-        # cache just the games starting soon
+        # Cache just the games starting soon
         games_json = nitro_session.find_upcoming_games()
         self.interpret_games_json(games_json, min_cutoff_time)
 
@@ -38,7 +39,7 @@ class MatchMaker(object):
                 return this_game
             this_game = self.game_cache.get()
 
-        # if we struck out there, cache games from nearly all soccer leagues
+        # If we struck out there, cache games from nearly all soccer leagues
         for league_key in SOCCER_GAME_DATA_KEYS:
             min_cutoff_time = int(time.time()) + BUFFER_TIME_BEFORE_GAMES
 
@@ -53,49 +54,16 @@ class MatchMaker(object):
                 return this_game
             this_game = self.game_cache.get()
 
-    def place_bet(self, nitro_session):
+    def place_bet(self, nitro_session, bet, amount_to_bet):
         """
         place_bet
         """
 
-        print('Adding bet...')
+        Logger.log('Adding bet...')
 
-        # TODO there's a world of todo's in here, do them
-
-        event_id = 'TODO'
-        period_id = 'TODO'
-        add_bet_response = nitro_session.add_bet(event_id, period_id, 'moneyline_draw')
-
-        if 'data' in add_bet_response:
-            bet_id = add_bet_response['data'][0]['bet'][0]['bet_id']
-            #self.log('Success, bet ID is ' + str(bet_id) + '.')
-            time.sleep(1)
-
-            # adjust risk to appropriate amount
-            #current_bet = self.get_bet_amount()
-            #print('Adjusting risk to ' + str(current_bet) + ' BTC...')
-            #self.api.adjust_risk(bet_id, str(current_bet))
-            time.sleep(1)
-
-            print('Placing betslip...')
-            #self.api.place_betslip()
-            time.sleep(1)
-
-            print('Confirming betslip...')
-            #self.api.confirm_betslip()
-            time.sleep(1)
-
-            #self.bet_in_progress = True
-            print('Bet in progress.')
-
-            # update last known balance since we've spent money
-            #transaction_dump = self.api.get_transactions()
-            #self.last_known_balance = float(transaction_dump['transactionData']['balance'])
-            #print('Available account balance is now ' + str(self.last_known_balance) + ' BTC.')
-            time.sleep(1)
-        else:
-            print('** Something went wrong adding bet. **')
-            raise RuntimeError('Something went wrong adding bet.')
+        event_id = bet['event_id']
+        period_id = bet['period_id']
+        nitro_session.add_and_confirm_bet(event_id, period_id, 'moneyline_draw', amount_to_bet)
 
     def interpret_games_json(self, games_json, min_cutoff_time):
         """
