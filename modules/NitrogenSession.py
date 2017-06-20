@@ -82,7 +82,19 @@ class NitrogenSession(object):
 
         self.freshen_session()
 
-        return self.api.find_upcoming_games()
+        retries = 0
+
+        while True:
+            time.sleep(2)
+            data = self.api.find_upcoming_games()
+            if data['errno'] == 0:
+                break
+            elif retries < 3:
+                retries += 1
+            else:
+                throw RuntimeError('Could not get upcoming games without error.')
+
+        return data
 
     def find_league_games(self, league_key):
         """
@@ -94,7 +106,19 @@ class NitrogenSession(object):
 
         self.freshen_session()
 
-        return self.api.find_games(league=league_key)
+        retries = 0
+
+        while True:
+            time.sleep(2)
+            data = self.api.find_games(league=league_key)
+            if data['errno'] == 0:
+                break
+            elif retries < 3:
+                retries += 1
+            else:
+                throw RuntimeError('Could not get league games without error.')
+
+        return data
 
     def add_and_confirm_bet(self, event_id, period_id, bet_type, amount_to_bet):
         """
