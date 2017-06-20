@@ -92,7 +92,7 @@ class NitrogenSession(object):
             elif retries < 3:
                 retries += 1
             else:
-                throw RuntimeError('Could not get upcoming games without error.')
+                raise RuntimeError('Could not get upcoming games without error.')
 
         return data
 
@@ -116,7 +116,7 @@ class NitrogenSession(object):
             elif retries < 3:
                 retries += 1
             else:
-                throw RuntimeError('Could not get league games without error.')
+                raise RuntimeError('Could not get league games without error.')
 
         return data
 
