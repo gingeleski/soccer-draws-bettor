@@ -9,7 +9,7 @@ class Logger(object):
         """
 
         with open('../' + LOGFILE_NAME, 'a') as file:
-            file.write('\n' + msg)
+            file.write('\n' + str(msg))
 
     @staticmethod
     def log(msg):
