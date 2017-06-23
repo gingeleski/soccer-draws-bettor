@@ -59,3 +59,10 @@ if it was a win, log net profit as wager_to_win
 ---
 
 First find_upcoming_games, then cache all the results of the various soccer leagues
+
+---
+
+6/23/2017
+
+- Update account balance after a result has been obtained
+- Betting Analyzer should record starting balance, keep some basic statistics
