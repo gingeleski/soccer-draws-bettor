@@ -27,6 +27,7 @@ MINUTES = 60
 # LOG FILE NAMES
 
 LOGFILE_NAME = 'actions_' + _START_TIME_STR + '.log'
+ANALYTICS_FILE_NAME = 'betting-analysis_' + _START_TIME_STR + '.log'
 BET_DB_NAME = 'bets_' + _START_TIME_STR + '.db'
 
 ####################################################################################################
