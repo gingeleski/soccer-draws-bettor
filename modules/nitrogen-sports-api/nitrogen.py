@@ -52,6 +52,9 @@ class NitrogenApi():
     def login(self, username=None, password=None):
         """
         Login
+
+        Returns:
+            (tuple) - [0] balance (float), [1] inplay (float)
         """
 
         login_url = BASE_URL + 'php/login/login.php'
@@ -61,6 +64,10 @@ class NitrogenApi():
             self.authenticated = True
         else:
             raise RuntimeError('Response to #login not OK')
+        req_json = req.json()
+        balance = req_json['balance']
+        inplay = req_json['inplay']
+        return balance, inplay
 
     def logout(self):
         """
