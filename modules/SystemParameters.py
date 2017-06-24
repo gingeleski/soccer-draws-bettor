@@ -114,3 +114,11 @@ SOCCER_GAME_DATA_KEYS.append('Australia+-+FFA+Cup+Qualifiers')
 SOCCER_GAME_DATA_KEYS.append('Australia+-+FFA+Cup')
 SOCCER_GAME_DATA_KEYS.append('Australia+-+Brisbane+Premier+League')
 SOCCER_GAME_DATA_KEYS.append('Australia+-+Brisbane+Capital+League+1')
+
+####################################################################################################
+
+####################################################################################################
+# UPTIME MONITORING
+
+DO_UPTIME_MONITORING = True
+UPTIME_MONITOR_KEY = '<YOUR UPTIMEROBOT MONITOR FOR NITROGEN"S KEY'
