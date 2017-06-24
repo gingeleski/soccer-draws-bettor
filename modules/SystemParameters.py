@@ -120,5 +120,5 @@ SOCCER_GAME_DATA_KEYS.append('Australia+-+Brisbane+Capital+League+1')
 ####################################################################################################
 # UPTIME MONITORING
 
-DO_UPTIME_MONITORING = True
+DO_UPTIME_MONITORING = False
 UPTIME_MONITOR_KEY = '<YOUR UPTIMEROBOT MONITOR FOR NITROGEN"S KEY>'
