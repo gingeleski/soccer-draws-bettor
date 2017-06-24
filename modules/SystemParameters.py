@@ -24,7 +24,9 @@ MINUTES = 60
 ####################################################################################################
 
 ####################################################################################################
-# LOG FILE NAMES
+# LOG FILE NAMES AND PATH
+
+OUTPUT_PATH = '../'
 
 LOGFILE_NAME = 'actions_' + _START_TIME_STR + '.log'
 ANALYTICS_FILE_NAME = 'betting-analysis_' + _START_TIME_STR + '.log'
@@ -77,6 +79,8 @@ HARD_SESSION_TIMEOUT = 5 * MINUTES
 ESTIMATED_GAME_TIME = 95 * MINUTES
 
 BET_RECHECK_TIME = 9 * MINUTES
+
+WEBSITE_DOWN_RECHECK_TIME = 10 * MINUTES
 
 ####################################################################################################
 

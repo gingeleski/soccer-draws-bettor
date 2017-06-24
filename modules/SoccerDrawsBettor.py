@@ -8,6 +8,7 @@ from MatchMaker import MatchMaker
 from NitrogenSession import NitrogenSession
 from ResultEvaluator import ResultEvaluator
 from SystemParameters import *
+from WebsiteStatus import WebsiteStatus
 
 import sched
 import time
@@ -22,6 +23,7 @@ class SoccerDrawsBettor(object):
         self.BettingAnalyzer = BettingAnalyzer()
         self.MatchMaker = MatchMaker()
         self.ResultEvaluator = ResultEvaluator()
+        self.WebsiteStatus = WebsiteStatus(DO_UPTIME_MONITORING)
 
         self.scheduler = sched.scheduler(time.time, time.sleep)
 
@@ -33,6 +35,8 @@ class SoccerDrawsBettor(object):
         """
         Start
         """
+
+        self.check_website_status()
 
         acct_balance = self.session.get_account_balance()
         self.BettingAnalyzer.set_balance(acct_balance)
@@ -48,6 +52,8 @@ class SoccerDrawsBettor(object):
         """
         Find next bet
         """
+
+        self.check_website_status()
 
         next_bet = self.MatchMaker.find_next_bet(self.session)
         if next_bet is None:
@@ -73,6 +79,8 @@ class SoccerDrawsBettor(object):
         Check on a bet in progress, see if there's yet a result
         """
 
+        self.check_website_status()
+
         game_bet_outcome = self.ResultEvaluator.get_status(self.session)
 
         if game_bet_outcome == 'PENDING':
@@ -88,3 +96,12 @@ class SoccerDrawsBettor(object):
             raise RuntimeError('Received unsupported game bet outcome')
 
         self.scheduler.enter(1 * SECONDS, 1, self.find_next_bet)
+
+    def check_website_status(self):
+        """
+        Check that Nitrogen Sports site is up, halting bot if needed
+        """
+
+        while self.WebsiteStatus.isWebsiteUp() is False:
+            Logger.log('NitrogenSports is down, rechecking in ' + str(WEBSITE_DOWN_RECHECK_TIME) + ' seconds')
+            time.sleep(WEBSITE_DOWN_RECHECK_TIME)
