@@ -4,18 +4,30 @@ SystemParameters.py
 
 from datetime import datetime
 
+####################################################################################################
+# NITROGENSPORTS.EU CREDENTIALS
+
+NITROGEN_USER = '<YOUR_USERNAME>'
+NITROGEN_PASS = '<YOUR_PASSWORD>'
+
+####################################################################################################
+
+####################################################################################################
+# CONSTANTS: TIME
+
 _START_TIME_STR = datetime.now().strftime('%m-%d-%Y_%H-%M-%S')
 
 # The following are constants to represent times in seconds
 SECONDS = 1
 MINUTES = 60
 
+####################################################################################################
+
+####################################################################################################
+# LOG FILE NAMES
+
 LOGFILE_NAME = 'actions_' + _START_TIME_STR + '.log'
 BET_DB_NAME = 'bets_' + _START_TIME_STR + '.db'
-
-# Nitrogen Sports credentials
-NITROGEN_USER = '<YOUR_USERNAME>'
-NITROGEN_PASS = '<YOUR_PASSWORD>'
 
 ####################################################################################################
 
