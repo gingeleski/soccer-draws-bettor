@@ -2,7 +2,8 @@
 WebsiteStatus.py
 """
 
-from SystemParameters import *
+from Logger import Logger
+from SystemParameters import UPTIME_MONITOR_KEY
 
 import requests
 
@@ -47,4 +48,5 @@ class WebsiteStatus(object):
         if status_code == UPTIME_ROBOT_STATUS_UP:
             return True
 
+        Logger.logn('Reporting https://nitrogensports.eu as down')
         return False
