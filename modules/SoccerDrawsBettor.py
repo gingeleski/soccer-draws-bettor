@@ -20,6 +20,7 @@ class SoccerDrawsBettor(object):
 
     def __init__(self):
 
+        # Initialize the betting system's functional modules
         self.BettingAnalyzer = BettingAnalyzer()
         self.MatchMaker = MatchMaker()
         self.ResultEvaluator = ResultEvaluator()
@@ -38,12 +39,14 @@ class SoccerDrawsBettor(object):
 
         self.check_website_status()
 
-        acct_balance = self.session.get_account_balance()
-        self.BettingAnalyzer.set_balance(acct_balance)
+        # Make current balance known to BettingAnalyzer
+        balance = self.session.get_account_balance()
+        self.BettingAnalyzer.set_balance(balance)
 
         # Use continue_bets() to verify we have enough $$$
         if self.BettingAnalyzer.continue_betting() is False:
-            raise Exception('Insufficient funds to start betting.')
+            Logger.logn('** Insufficient funds to start betting **')
+            raise Exception('Insufficient funds to start betting')
 
         self.scheduler.enter(1 * SECONDS, 1, self.find_next_bet)
         self.scheduler.run()
@@ -95,6 +98,10 @@ class SoccerDrawsBettor(object):
         else:
             raise RuntimeError('Received unsupported game bet outcome')
 
+        # Make current balance known to BettingAnalyzer
+        balance = self.session.get_account_balance()
+        self.BettingAnalyzer.set_balance(balance)
+
         self.scheduler.enter(1 * SECONDS, 1, self.find_next_bet)
 
     def check_website_status(self):
@@ -103,5 +110,5 @@ class SoccerDrawsBettor(object):
         """
 
         while self.WebsiteStatus.isWebsiteUp() is False:
-            Logger.logn('NitrogenSports is down, rechecking in ' + str(WEBSITE_DOWN_RECHECK_TIME) + ' seconds')
+            Logger.logn('Rechecking website status in ' + str(WEBSITE_DOWN_RECHECK_TIME) + ' s')
             time.sleep(WEBSITE_DOWN_RECHECK_TIME)
