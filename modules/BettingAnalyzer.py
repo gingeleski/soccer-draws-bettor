@@ -27,7 +27,7 @@ class BettingAnalyzer(object):
         Set account balance
         """
 
-        self.current_balance = new_balance
+        self.current_balance = float(new_balance)
         if self.start_balance is None:
             self.start_balance = self.current_balance
             Logger.logn('Starting balance recorded as ' + str(self.start_balance) + ' BTC')
