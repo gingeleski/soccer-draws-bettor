@@ -62,13 +62,13 @@ class NitrogenApi():
         status = 'PENDING'
         req = self.session.post(login_url, data=payload, verify=False)
 
-        if req.status_code == requests.codes.ok:
-            status = 'SUCCESS'
-            self.authenticated = True
-        else:
+        if req.status_code != requests.codes.ok:
             status = 'NOT OK'
             return status, None, None
 
+        self.authenticated = True
+
+        status = 'SUCCESS'
         balance = req.json()['balance']
         inplay = req.json()['inplay']
 
@@ -89,9 +89,10 @@ class NitrogenApi():
 
         if req.status_code != requests.codes.ok:
             status = 'NOT OK'
-        else:
-            status = 'SUCCESS'
-            self.authenticated = False
+            return status
+
+        status = 'SUCCESS'
+        self.authenticated = False
 
         return status
 
