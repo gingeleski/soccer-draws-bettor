@@ -93,7 +93,7 @@ class BettingAnalyzer(object):
         out += 'Average number of bets before a win: XX'
         out += 'Average profit per win: XX BTC'
 
-        with open('../' + LOGFILE_NAME, 'a') as file:
+        with open(OUTPUT_PATH + LOGFILE_NAME, 'w') as file:
             file.write(out)
 
     def __del__(self):

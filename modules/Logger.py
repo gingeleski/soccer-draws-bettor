@@ -1,4 +1,4 @@
-from SystemParameters import LOGFILE_NAME
+from SystemParameters import LOGFILE_NAME, OUTPUT_PATH
 
 class Logger(object):
 
@@ -8,7 +8,7 @@ class Logger(object):
         Write out to file
         """
 
-        with open('../' + LOGFILE_NAME, 'a') as file:
+        with open(OUTPUT_PATH + LOGFILE_NAME, 'a') as file:
             file.write('\n' + str(msg))
 
     @staticmethod
