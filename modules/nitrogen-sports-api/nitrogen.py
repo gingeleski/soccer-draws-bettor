@@ -12,7 +12,6 @@ from requests.packages.urllib3.util.retry import Retry
 requests.packages.urllib3.disable_warnings(InsecureRequestWarning)
 
 BASE_URL = 'https://nitrogensports.eu/'
-PING_URL_START = 'socket.io/?EIO=3&transport=polling'
 
 class NitrogenApi():
     """
@@ -26,9 +25,7 @@ class NitrogenApi():
 
         self.authenticated = False
         self.session = None
-        self.polling_sid = None
-        self.ping_interval = -1
-        self.ping_count = 0
+
         if auto_start_session is True:
             self.new_session()
 
@@ -38,8 +35,10 @@ class NitrogenApi():
         """
 
         self.session = cfscrape.CloudflareScraper()
+
         retries = Retry(total=5, backoff_factor=1)
         self.session.mount('https://', HTTPAdapter(max_retries=retries))
+
         self.pass_cloudflare()
 
     def pass_cloudflare(self):
@@ -54,82 +53,47 @@ class NitrogenApi():
         Login
 
         Returns:
-            (tuple) - [0] balance (float), [1] inplay (float)
+            (tuple) - [0] status (str), [1] balance (float), [2] inplay (float)
         """
 
         login_url = BASE_URL + 'php/login/login.php'
         payload = {'username': username, 'password': password, 'otp': '', 'captcha_code': ''}
+
+        status = 'PENDING'
         req = self.session.post(login_url, data=payload, verify=False)
+
         if req.status_code == requests.codes.ok:
+            status = 'SUCCESS'
             self.authenticated = True
         else:
-            raise RuntimeError('Response to #login not OK')
-        req_json = req.json()
-        balance = req_json['balance']
-        inplay = req_json['inplay']
-        return balance, inplay
+            status = 'NOT OK'
+            return status, None, None
+
+        balance = req.json()['balance']
+        inplay = req.json()['inplay']
+
+        return status, balance, inplay
 
     def logout(self):
         """
         Logout
+
+        Returns:
+            status (str)
         """
 
         logout_url = BASE_URL + 'php/login/logout.php'
+
+        status = 'PENDING'
         req = self.session.post(logout_url, verify=False)
+
         if req.status_code != requests.codes.ok:
-            print(req.text)
-            raise RuntimeError('Response to #logout not OK')
+            status = 'NOT OK'
         else:
+            status = 'SUCCESS'
             self.authenticated = False
 
-    def ping(self):
-        """
-        Send the server heartbeat / keep-alive / ping
-        """
-
-        unix_time = int(time.time())
-        ping_url = BASE_URL + PING_URL_START + '&t=' + str(unix_time)
-        ping_url = ping_url + '-' + str(self.ping_count)
-        req = None
-        if self.ping_count == 0:
-            req = self.session.get(ping_url, verify=False)
-            poll_info_json = json.loads(req.text[req.text.find('{'):])
-            self.polling_sid = poll_info_json['sid']
-            self.ping_interval = poll_info_json['pingInterval'] / 1000
-        else:
-            ping_url = ping_url + '&sid=' + self.polling_sid
-            if self.ping_count < 3:
-                req = self.session.get(ping_url, verify=False)
-            else:
-                req = self.session.post(ping_url, verify=False)
-        if req is None or req.status_code != requests.codes.ok:
-            print(req.text)
-            raise RuntimeError('Response to #ping not OK')
-        self.ping_count += 1
-
-    def keep_alive(self, duration=None):
-        """
-        Keep the session alive by pinging at a normal interval
-
-        Args:
-            duration: how long to keep alive, in seconds
-        """
-
-        now = int(time.time())
-        if duration is not None:
-            end_time = now + duration
-        else:
-            end_time = None
-        next_time = now
-        looping = True
-        while looping is True:
-            if duration is not None and now > end_time:
-                looping = False
-            elif now >= next_time:
-                self.ping()
-                next_time = now + self.ping_interval
-            time.sleep(1)
-            now = int(time.time())
+        return status
 
     def get_transactions(self):
         """
