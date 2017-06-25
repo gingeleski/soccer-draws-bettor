@@ -53,26 +53,23 @@ class NitrogenApi():
         Login
 
         Returns:
-            (tuple) - [0] status (str), [1] balance (float), [2] inplay (float)
+            (tuple) - [0] status (bool), [1] balance (float), [2] inplay (float)
         """
 
         login_url = BASE_URL + 'php/login/login.php'
         payload = {'username': username, 'password': password, 'otp': '', 'captcha_code': ''}
 
-        status = 'PENDING'
         req = self.session.post(login_url, data=payload, verify=False)
 
         if req.status_code != requests.codes.ok:
-            status = 'NOT OK'
-            return status, None, None
+            return False, None, None
 
         self.authenticated = True
 
-        status = 'SUCCESS'
         balance = req.json()['balance']
         inplay = req.json()['inplay']
 
-        return status, balance, inplay
+        return True, balance, inplay
 
     def logout(self):
         """
@@ -84,17 +81,14 @@ class NitrogenApi():
 
         logout_url = BASE_URL + 'php/login/logout.php'
 
-        status = 'PENDING'
         req = self.session.post(logout_url, verify=False)
 
         if req.status_code != requests.codes.ok:
-            status = 'NOT OK'
-            return status
+            return False
 
-        status = 'SUCCESS'
         self.authenticated = False
 
-        return status
+        return True
 
     def get_transactions(self):
         """

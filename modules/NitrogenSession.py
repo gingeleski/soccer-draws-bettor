@@ -35,7 +35,7 @@ class NitrogenSession(object):
 
         while True:
             status, balance, inplay = self.api.login(NITROGEN_USER, NITROGEN_PASS)
-            if status == 'SUCCCESS':
+            if status == True:
                 self.logged_in = True
                 self.last_login_time = int(time.time())
                 self.last_observed_balance = balance
@@ -43,6 +43,7 @@ class NitrogenSession(object):
                 time.sleep(1)
                 return
             elif attempts < 3:
+                print('2')
                 attempts += 1
                 time.sleep(120)  # Try again in 2 minutes
             else:
@@ -58,7 +59,7 @@ class NitrogenSession(object):
 
         while True:
             status = self.api.logout()
-            if status == 'SUCCESS':
+            if status == True:
                 self.logged_in = False
                 time.sleep(1)
                 return
