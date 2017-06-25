@@ -19,10 +19,13 @@ class MatchMaker(object):
 
     def find_next_bet(self, nitro_session):
         """
-        find_next_bet
+        Find next bet
 
         Args:
             nitro_session (NitrogenSession) - Session to retrieve game data with
+
+        Returns:
+            (object)
         """
 
         min_cutoff_time = int(time.time()) + BUFFER_TIME_BEFORE_GAMES
@@ -56,18 +59,20 @@ class MatchMaker(object):
 
     def place_bet(self, nitro_session, bet, amount_to_bet):
         """
-        place_bet
+        Place bet
         """
-
-        Logger.log('Adding bet...')
 
         event_id = bet['event_id']
         period_id = bet['period_id']
+
+        Logger.logn('Adding bet... (' + str(amount_to_bet) + ' BTC, event ID ' + str(event_id))
+        Logger.log(', period ID ' + str(period_id) + ')')
+
         nitro_session.add_and_confirm_bet(event_id, period_id, 'moneyline_draw', amount_to_bet)
 
     def interpret_games_json(self, games_json, min_cutoff_time):
         """
-        interpret_games_json
+        Interpret games' JSON
         """
 
         for event in games_json['data']:

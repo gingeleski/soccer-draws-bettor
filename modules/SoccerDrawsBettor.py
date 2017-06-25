@@ -58,11 +58,11 @@ class SoccerDrawsBettor(object):
         next_bet = self.MatchMaker.find_next_bet(self.session)
         if next_bet is None:
             # Schedule another find_next_bet after the specified retry time
-            Logger.log('next_bet is none, scheduling a retry...')
+            Logger.logn('next_bet is none, scheduling a retry...')
             self.scheduler.enter(FIND_BET_RETRY_TIME, 1, self.find_next_bet)
         else:
-            Logger.log('Going to place the following bet...')
-            Logger.log(next_bet)
+            Logger.logn('Going to place the following bet...')
+            Logger.logn(next_bet)
             game_cutoff_time = next_bet['cutoff_time']
             amount_to_bet = self.BettingAnalyzer.get_current_bet_amount()
             self.MatchMaker.place_bet(self.session, next_bet, amount_to_bet)
@@ -103,5 +103,5 @@ class SoccerDrawsBettor(object):
         """
 
         while self.WebsiteStatus.isWebsiteUp() is False:
-            Logger.log('NitrogenSports is down, rechecking in ' + str(WEBSITE_DOWN_RECHECK_TIME) + ' seconds')
+            Logger.logn('NitrogenSports is down, rechecking in ' + str(WEBSITE_DOWN_RECHECK_TIME) + ' seconds')
             time.sleep(WEBSITE_DOWN_RECHECK_TIME)

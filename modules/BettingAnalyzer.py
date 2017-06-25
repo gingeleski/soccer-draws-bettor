@@ -20,7 +20,7 @@ class BettingAnalyzer(object):
         self.end_time = None
         self.end_balance = None
 
-        Logger.log('Initialized BettingAnalyzer at ' + str(self.start_time))
+        Logger.logn('Initialized BettingAnalyzer at ' + str(self.start_time))
 
     def set_balance(self, new_balance):
         """
@@ -30,7 +30,7 @@ class BettingAnalyzer(object):
         self.current_balance = new_balance
         if self.start_balance is None:
             self.start_balance = self.current_balance
-            Logger.log('Starting balance recorded as ' + str(self.start_balance) + ' BTC')
+            Logger.logn('Starting balance recorded as ' + str(self.start_balance) + ' BTC')
 
     def reset_betting_level(self):
         """
@@ -38,19 +38,19 @@ class BettingAnalyzer(object):
         """
 
         self.current_betting_level = 1
-        Logger.log('Bet level reset to ' + str(self.current_betting_level))
+        Logger.logn('Bet level reset to ' + str(self.current_betting_level))
 
     def progress_betting_level(self):
         """
         Progress current betting level by 1
         """
 
-        Logger.log('Progressing bet level...')
+        Logger.logn('Progressing bet level...')
         self.current_betting_level += 1
         if self.current_betting_level > MAX_BET_TIER:
-            Logger.log('Max betting level exceeded')
+            Logger.logn('Max betting level exceeded')
             raise RuntimeError('Max betting level exceeded')
-        Logger.log('Bet level is at ' + str(self.current_betting_level))
+        Logger.logn('Bet level is at ' + str(self.current_betting_level))
 
     def get_current_bet_amount(self):
         """

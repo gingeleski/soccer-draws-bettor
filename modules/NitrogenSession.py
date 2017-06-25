@@ -46,7 +46,7 @@ class NitrogenSession(object):
                 attempts += 1
                 time.sleep(120)  # Try again in 2 minutes
             else:
-                Logger.log('** Could not log in without error **')
+                Logger.logn('** Could not log in without error **')
                 raise RuntimeError('Could not log in without error')
 
     def logout(self):
@@ -66,7 +66,7 @@ class NitrogenSession(object):
                 attempts += 1
                 time.sleep(120)  # Try again in 2 minutes
             else:
-                Logger.log('** Could not log out without error **')
+                Logger.logn('** Could not log out without error **')
                 raise RuntimeError('Could not log out without error')
 
     def freshen_session(self):
@@ -88,7 +88,7 @@ class NitrogenSession(object):
         self.freshen_session()
 
         balance = self.last_observed_balance
-        Logger.log('Recording account balance as ' + str(balance) + ' BTC')
+        Logger.logn('Recording account balance as ' + str(balance) + ' BTC')
 
         return balance
 
@@ -119,7 +119,7 @@ class NitrogenSession(object):
                 attempts += 1
                 time.sleep(120)  # Try again in 2 minutes
             else:
-                Logger.log('** Could not get upcoming games without error **')
+                Logger.logn('** Could not get upcoming games without error **')
                 raise RuntimeError('Could not get upcoming games without error')
 
     def find_league_games(self, league_key):
@@ -146,7 +146,7 @@ class NitrogenSession(object):
                 attempts += 1
                 time.sleep(120)  # Try again in 2 minutes
             else:
-                Logger.log('** Could not get league games without error **')
+                Logger.logn('** Could not get league games without error **')
                 raise RuntimeError('Could not get league games without error.')
 
     def add_and_confirm_bet(self, event_id, period_id, bet_type, amount_to_bet):
@@ -161,7 +161,7 @@ class NitrogenSession(object):
 
         if 'data' in add_bet_response:
             bet_id = add_bet_response['data'][0]['bet'][0]['bet_id']
-            Logger.log('Bet ID is ' + str(bet_id))
+            Logger.logn('Bet ID is ' + str(bet_id))
             time.sleep(1)
             self.adjust_risk(bet_id, amount_to_bet)
             time.sleep(1)
@@ -170,10 +170,10 @@ class NitrogenSession(object):
             self.confirm_betslip()
             time.sleep(1)
         else:
-            Logger.log('** Something went wrong adding bet **')
+            Logger.logn('** Something went wrong adding bet **')
             raise RuntimeError('Something went wrong adding bet')
 
-        Logger.log('Bet in progress.')
+        Logger.logn('Bet in progress.')
 
     def add_bet(self, event_id, period_id, bet_type):
         """
@@ -183,7 +183,7 @@ class NitrogenSession(object):
             (object)
         """
 
-        Logger.log('Adding bet... event ID ' + str(event_id) + ', period ID ' + str(period_id))
+        Logger.logn('Adding bet... event ID ' + str(event_id) + ', period ID ' + str(period_id))
         return self.api.add_bet(event_id, period_id, bet_type)
 
     def adjust_risk(self, bet_id, amount_to_bet):
@@ -194,7 +194,7 @@ class NitrogenSession(object):
             (object)
         """
 
-        Logger.log('Adjusting bet ID ' + str(bet_id) + ' risk to ' + str(amount_to_bet) + ' BTC')
+        Logger.logn('Adjusting bet ID ' + str(bet_id) + ' risk to ' + str(amount_to_bet) + ' BTC')
         return self.api.adjust_risk(bet_id, str(amount_to_bet))
 
     def place_betslip(self):
@@ -205,7 +205,7 @@ class NitrogenSession(object):
             (object)
         """
 
-        Logger.log('Placing betslip...')
+        Logger.logn('Placing betslip...')
         return self.api.place_betslip()
 
     def confirm_betslip(self):
@@ -216,5 +216,5 @@ class NitrogenSession(object):
             (object)
         """
 
-        Logger.log('Confirming betslip...')
+        Logger.logn('Confirming betslip...')
         return self.api.confirm_betslip()
