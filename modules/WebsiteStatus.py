@@ -41,6 +41,12 @@ class WebsiteStatus(object):
             return True
 
         res = requests.post(self.api_url, data=self.payload, headers=self.headers, verify=False)
+
+        # Check if the actual UptimeRobot is down
+        if res.status_code != requests.codes.ok:
+            Logger.logn('UptimeRobot is down')
+            return False
+
         res_json = res.json()
 
         status_code = res_json['monitors'][0]['status']
