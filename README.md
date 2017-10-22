@@ -14,7 +14,7 @@ virtualenv venv
 # activate the virtualenv, below is how for powershell
 .\venv\scripts\activate.ps1
 
-pip install -r nitrogen-sports-api\requirements.txt
+pip install -e nitrogen-sports-api
 pip install -r requirements.txt
 
 python soccer_draws_bettor.py
