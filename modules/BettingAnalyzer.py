@@ -27,7 +27,7 @@ class BettingAnalyzer(object):
         Set account balance
         """
 
-        self.current_balance = new_balance
+        self.current_balance = float(new_balance)
         if self.start_balance is None:
             self.start_balance = self.current_balance
             Logger.logn('Starting balance recorded as ' + str(self.start_balance) + ' BTC')
@@ -79,21 +79,20 @@ class BettingAnalyzer(object):
         Writes an analytics file about this betting session
         """
 
-        out = ''
-        out += 'Start time: ' + str(self.start_time)
-        out += 'Start balance: ' + str(self.start_balance) + ' BTC'
-        out += 'End time: ' + str(self.end_time)
-        out += 'End balance: ' + str(self.end_balance) + ' BTC'
+        out = 'Start time: ' + str(self.start_time)
+        out += '\n' + 'Start balance: ' + str(self.start_balance) + ' BTC'
+        out += '\n' + 'End time: ' + str(self.end_time)
+        out += '\n' + 'End balance: ' + str(self.end_balance) + ' BTC'
 
         # TODO implement the following...
-        out += 'Total profit: XX BTC'
-        out += 'Mean profit per day: XX BTC'
-        out += 'Mean profit per hour: XX BTC'
-        out += 'Total risked: XX BTC'
-        out += 'Average number of bets before a win: XX'
-        out += 'Average profit per win: XX BTC'
+        out += '\n' + 'Total profit: XX BTC'
+        out += '\n' + 'Mean profit per day: XX BTC'
+        out += '\n' + 'Mean profit per hour: XX BTC'
+        out += '\n' + 'Total risked: XX BTC'
+        out += '\n' + 'Average number of bets before a win: XX'
+        out += '\n' + 'Average profit per win: XX BTC'
 
-        with open(OUTPUT_PATH + LOGFILE_NAME, 'w') as file:
+        with open(OUTPUT_PATH + ANALYTICS_FILE_NAME, 'w') as file:
             file.write(out)
 
     def __del__(self):
